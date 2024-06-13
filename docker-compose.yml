@@ -1,0 +1,28 @@
+version: '3'
+services:
+  meme_api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - s3
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/meme_db
+      - S3_BUCKET=bucket_name
+      - S3_ACCESS_KEY=access_key
+      - S3_SECRET_KEY=secret_key
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=meme_db
+
+  s3:
+    image: amazon/s3
+    environment:
+      - AWS_ACCESS_KEY_ID=access_key
+      - AWS_SECRET_ACCESS_KEY=secret_key
+      - AWS_BUCKET=bucket_name
